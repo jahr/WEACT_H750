@@ -32,42 +32,13 @@ ENTRY(Reset_Handler)
 /* define output sections */
 SECTIONS
 {
-    /* Define the code that goes in QSPI flash */
-    .text_ext :
-    {
-        . = ALIGN(4);
-        /**drivers/*(.text* .rodata*)*/ /* necessary */
-        *extmod/*(.text* .rodata*)
-        *frozen_mpy/*(.text* .rodata*)
-        *lib/libm_dbl/*(.text* .rodata*)
-        *lib/oofatfs/*(.text* .rodata*)
-        /**lib/stm32lib/CMSIS/*(.text* .rodata*)*/ /* necessary */
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_a*(.text* .rodata*)
-        /**lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_c*(.text* .rodata*)*/ /* stm32h7xx_hal_cortex is necessary */
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_d*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_f*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_g*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_m*(.text* .rodata*)
-        /**lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_p*(.text* .rodata*)*/ /* necessary */
-        /**lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_r*(.text* .rodata*)*/ /* necessary */
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_s*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_t*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_u*(.text* .rodata*)
-        *lib/stm32lib/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_*(.text* .rodata*)
-        *py/*(.text* .rodata*)
-        *shared/*(.text* .rodata*)
-        *usbdev/*(.text* .rodata*)
-        . = ALIGN(4);
-    } >FLASH_EXT
-
     /* The startup code goes first into FLASH */
     .isr_vector :
     {
         . = ALIGN(4);
         KEEP(*(.isr_vector)) /* Startup code */
         . = ALIGN(4);
-    } >FLASH
+    } >FLASH_EXT
 
     /* The program code and other data goes into FLASH */
     .text :
@@ -79,7 +50,7 @@ SECTIONS
     /*  *(.glue_7t)  */    /* glue thumb to arm code */
         . = ALIGN(4);
         _etext = .;        /* define a global symbol at end of code */
-    } >FLASH
+    } >FLASH_EXT
 
     /* For C++ exception handling */
 /*
@@ -102,7 +73,7 @@ SECTIONS
         *(.data*)
         . = ALIGN(4);
         _edata = .;
-    } >RAM AT> FLASH
+    } >RAM AT> FLASH_EXT
 
     INCLUDE common_bss_heap_stack.ld
 }

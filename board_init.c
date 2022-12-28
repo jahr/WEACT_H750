@@ -28,7 +28,7 @@
 
 // This init function is needed to memory map the QSPI flash early in the boot process
 
-void board_early_init(void) {
+void mboot_board_early_init(void) {
     // Explicitly init SPI2 because it's not enabled as a block device
     spi_bdev_ioctl(&spi_bdev2, BDEV_IOCTL_INIT, (uint32_t)&spiflash2_config);
 }
